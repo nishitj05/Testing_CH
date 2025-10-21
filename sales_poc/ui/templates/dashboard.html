@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-lg-6">
+    <div class="card shadow-sm h-100">
+      <div class="card-body">
+        <h5 class="card-title">Revenue Gap</h5>
+        <p class="display-6 text-primary">${{ '%.2f' | format(revenue_gap) }}</p>
+        <p class="text-muted">Calculated strictly using the December underperformer logic.</p>
+        <div class="alert alert-info" role="alert">
+          {{ gemini_copy['revenue'] }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="card shadow-sm h-100">
+      <div class="card-body">
+        <h5 class="card-title">Representative Segments</h5>
+        <ul class="list-group list-group-flush mb-3">
+          {% for segment, count in segments.items() %}
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            Segment {{ segment }}
+            <span class="badge bg-secondary rounded-pill">{{ count }}</span>
+          </li>
+          {% endfor %}
+        </ul>
+        <div class="alert alert-info" role="alert">
+          {{ gemini_copy['segments'] }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4 mt-1">
+  <div class="col-lg-6">
+    <div class="card shadow-sm h-100">
+      <div class="card-body">
+        <h5 class="card-title">Key Drivers</h5>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Feature</th>
+              <th scope="col">Mean |SHAP|</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in top_drivers %}
+            <tr>
+              <td>{{ row.feature }}</td>
+              <td>{{ '%.4f' | format(row.mean_abs_shap) }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <div class="alert alert-info" role="alert">
+          {{ gemini_copy['drivers'] }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="card shadow-sm h-100">
+      <div class="card-body">
+        <h5 class="card-title">At-Risk Representatives</h5>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">Rep ID</th>
+              <th scope="col">Month</th>
+              <th scope="col">Risk Score</th>
+              <th scope="col">Prediction</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in risk_reps %}
+            <tr>
+              <td>{{ row.Rep_ID }}</td>
+              <td>{{ row.Month }}</td>
+              <td>{{ '%.2f' | format(row.At_Risk_Score) }}</td>
+              <td>
+                {% if row.At_Risk_Prediction == 1 %}
+                <span class="badge bg-danger">At Risk</span>
+                {% else %}
+                <span class="badge bg-success">On Track</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <div class="alert alert-info" role="alert">
+          {{ gemini_copy['risk'] }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

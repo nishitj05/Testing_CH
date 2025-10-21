@@ -1,0 +1,16 @@
+body {
+  font-family: "Inter", "Segoe UI", sans-serif;
+}
+
+.card-title {
+  font-weight: 600;
+}
+
+.alert {
+  font-size: 0.9rem;
+}
+
+.table td,
+.table th {
+  vertical-align: middle;
+}
